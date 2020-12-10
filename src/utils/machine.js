@@ -1,31 +1,51 @@
 import { Machine } from "xstate";
-      
-const introVals = {
-    start: 'start',
+
+const commands = {
+    ring: 'ring',
+    openBox: 'open box',
+    up: 'up',
+    down: 'down',
     enter: 'enter',
     giveup: 'giveup',
+    north: 'north',
+    south: 'south',
+    east: 'east',
+    west: 'west',
+    fight: 'fight',
+    flee: 'flee',
+    scream: 'scream',
+    deaden: 'deaden with boot',
 };
 
-const firstLevel = {
-    gates: 'down through the caves',
-    mountain: 'up to the mountains',
-};
+const intro = {
+    start: 'start',
+    enter: 'enter',
+    giveup: 'giveup'
+}
 
-const cavern = {
-    open: 'open the box',
-    north: 'head north',
-};
+const level1_cave = {
+    intro: 'introcave',
+    open: 'open',
+    north: 'north',
+    west: 'west',
+    east: 'east',
+    north2: 'north2',
+    west2: 'west2',
+    west3: 'west3',
+    ring: 'ring',
+    scream: 'scream',
+    deaden: 'deaden',
+}
 
-const step1 = {
-    west: 'head west',
-    east: 'head east',
-};
+const level1_mountain = {
+    intro: 'intromoutain',
+}
 
 export const dandyMachine = Machine({
     id: 'dandy',
     initial: 'start',
     states: {
-      [introVals.start]: {
+      [intro.start]: {
         meta: {
           story: `<p>Down in the dark, twisting labyrinth of Fang, unlnown
           horrors await you. Devised by the devilish mind of Baron
@@ -42,33 +62,33 @@ export const dandyMachine = Machine({
           will it be?</p>`,
         },
         on: {
-          [introVals.enter]: introVals.enter,
-          [introVals.giveup]: introVals.giveup,
+          [commands.enter]: intro.enter,
+          [commands.giveup]: intro.giveup,
         },
       },
-      [introVals.giveup]: {
+      [intro.giveup]: {
         meta: {
           story: `Be gone with you coward`,
         },
         on: {
-            restart: introVals.start,
+            restart: intro.start,
         },
       },
-      [introVals.enter]: {
+      [intro.enter]: {
         meta: {
           story: `Your journey begins here, the town crier crashes a baton against the town bells
           and now you must decide if you go up to the mountains or down through the caves, each has
           its own perils, choose wisely`
         },
         on: {
-            [firstLevel.mountain]: firstLevel.mountain,
-            [firstLevel.gates]: firstLevel.gates,
+            [commands.up]: level1_mountain.intro,
+            [commands.down]: level1_cave.intro,
         },
       },
-      [firstLevel.gates]: {
+      [level1_cave.intro]: {
         meta: {
             story: `The clamour of the excited spectators gradually
-            fades behind you as y   ou venture deep lnto the
+            fades behind you as you venture deep lnto the
             gloom of the cavern tunnel.
             Large crystals hang from the tunnel roof at twenty metre intervals, radiating a soft light, just enough
             for you to see your way. As your eyes gradually
@@ -86,18 +106,18 @@ export const dandyMachine = Machine({
             `,
           },
           on: {
-            [cavern.open]: cavern.open,
-            [cavern.north]: cavern.north,
+            [commands.openBox]: level1_cave.open,
+            [commands.north]: level1_cave.north,
          },
       },
-      [firstLevel.mountain]: {
+      [level1_mountain.intro]: {
         meta: {
             story: `The clamour of the excited spectators gradually
             fades behind you as vou venture with the first steps on your
             long climb up the mountain face.`,
           },
       },
-      [cavern.open]: {
+      [level1_cave.open]: {
         meta: {
             story: `The lid of the box lifts off easily. Inside you find two
             Gold Pieces and a note written on a small plece of
@@ -112,10 +132,10 @@ export const dandyMachine = Machine({
             tunnel`,
           },
           on: {
-              [cavern.north]: cavern.north,
+              [commands.north]: level1_cave.north,
           }
       },
-      [cavern.north]: {
+      [level1_cave.north]: {
         meta: {
             story: `After walking down the tunnel for a few minutes,
             you come to a junction. A white arrow painted on
@@ -126,18 +146,69 @@ export const dandyMachine = Machine({
             decided to go east. `
           },
         on: {
-            [step1.west]: step1.west,
-            [step1.east]: step1.east,
+            [commands.west]: level1_cave.west,
+            [commands.east]: level1_cave.east,
         },
       },
-    [step1.west]: {
+    [level1_cave.west]: {
         meta: {
-            story: `step1.west`
+            story: `Following the three sets of wet footprints along the
+            west passage of the tunnel, you soon arrive at a
+            junction. West you can see the footprints continue, whilst there are a sole set of tracks north`
+        },
+        on: {
+            [commands.west]: level1_cave.west2,
+            [commands.north]: level1_cave.north2,
         },
     },
-    [step1.east]: {
+    [level1_cave.east]: {
         meta: {
             story: `step1.east`
+        },
+    },
+    [level1_cave.west2]: {
+        meta: {
+            story: `Walking along the tunnel, you are surprised to see a
+            large iron bell hanging down from the ceiling.`
+        },
+        on: {
+            [commands.ring]: level1_cave.ring,
+            [commands.west]: level1_cave.west3,
+        },
+    },
+    [level1_cave.ring]: {
+        meta: {
+            story: `A dull 'bong' sounds ftom the bell like a death toll.
+            Everying around you starts to vibrate, and you
+            grit your teeth as your head too starts to shudder.
+            Your whole body is trembling and you fall to the
+            floor. You quiver and shake, writhing convulsively
+            on the floor as the vibiations intensify. Lose 2 SKILL
+            points and 2 STAMINA points. You search desperately for a way of stopping the bell.`
+        },
+        on: {
+            [commands.scream]: level1_cave.scream,
+            [commands.deaden]: level1_cave.deaden,
+        },
+    },
+    [level1_cave.west3]: {
+        meta: {
+            story: `level1_cave.west3`
+        },
+    },
+    [level1_cave.north2]: {
+        meta: {
+            story: `step2.north`
+        },
+    },
+    [level1_cave.scream]: {
+        meta: {
+            story: `level1_cave.scream`
+        },
+    },
+    [level1_cave.deaden]: {
+        meta: {
+            story: `level1_cave.deaden`
         },
     },
     }

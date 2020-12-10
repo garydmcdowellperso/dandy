@@ -18,20 +18,16 @@ export default new Router({
         component: require("@/pages/Home.vue").default // load sync home
     },
     {
-        path: "/enter",
-        name: "home",
-        component: require("@/pages/Home.vue").default // load sync home
-    },
-    {
-        path: "/gates-of-hell",
-        name: "home",
-        component: require("@/pages/Home.vue").default // load sync home
-    },
-    {
         path: "/setup",
         name: "setup",
         meta: { layout: "no-sidebar" },
         component: require("@/pages/Setup.vue").default
+    },
+    {
+        path: "/login",
+        name: "login",
+        meta: { layout: "none" },
+        component: require("@/pages/Login.vue").default
     },
     {
         path: "*",

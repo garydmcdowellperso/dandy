@@ -29,3 +29,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+h1 {
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 1.5em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #ffffff;
+}
+</style>
