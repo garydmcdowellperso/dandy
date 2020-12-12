@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
     el: '#app',
     data() {
@@ -40,10 +42,21 @@ export default {
       }
     },
     methods: {
-      doLogin() {
-        alert('Not implemented yet :O')
-      }
-    }
+        ...mapActions(["LogIn"]),
+        async doLogin() {
+            try {
+                const user = {
+                    email: this.email,
+                    password: this.password
+                };
+
+                await this.LogIn(user);
+                this.showError = false
+            } catch (error) {
+                this.showError = true
+            }
+        },
+    },
 }
 </script>
 <style scoped>

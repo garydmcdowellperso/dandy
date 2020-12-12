@@ -8,7 +8,9 @@
       </div>
 
       <div class="navbar-end">
-          <ValueBlock />
+        <span v-if="isLoggedIn">
+            <a @click="logout">Logout</a>
+        </span>
       </div>
     </div>
   </nav>
@@ -18,14 +20,23 @@
 import ValueBlock from './ValueBlock';
 
 export default {
-  data() {
-    return {
-      open: false
-    };
-  },
-  components: {
-    ValueBlock
-  }
+    data() {
+        return {
+            open: false
+        };
+    },
+    computed: {
+        isLoggedIn : function(){ return this.$store.getters.isAuthenticated},
+    },
+    methods: {
+        async logout (){
+            await this.$store.dispatch('LogOut')
+            this.$router.push('/login')
+        }
+    },
+    components: {
+        ValueBlock
+    }
 };
 </script>
 
